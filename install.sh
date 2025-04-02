@@ -3,27 +3,37 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Unload existing CH340 drivers
-sudo rmmod ch34x 2>/dev/null || true
-sudo modprobe -r ch34x 2>/dev/null || true
+# Print a starting message
+echo "Starting CH34x driver installation..."
 
-sudo rmmod ch341 2>/dev/null || true
-sudo modprobe -r ch341 2>/dev/null || true
+# Unload existing CH340/CH341 drivers if they are loaded
+sudo rmmod ch34x || true
+sudo rmmod ch341 || true
 
-# Clone the repository if not already cloned
-if [ ! -d "ch340-ubuntu-22.04-fix" ]; then
-    git clone https://github.com/Vishal-Mutha/ch340-ubuntu-22.04-fix.git
+# Clone the repository into the home directory if not already present
+REPO_DIR="$HOME/ch340-ubuntu-22.04-fix"
+if [ ! -d "$REPO_DIR" ]; then
+    echo "Cloning the CH34x driver repository..."
+    git clone https://github.com/Vishal-Mutha/ch340-ubuntu-22.04-fix.git "$REPO_DIR"
 fi
 
-cd ch340-ubuntu-22.04-fix
+# Change to the repository directory
+cd "$REPO_DIR" || { echo "Failed to enter $REPO_DIR"; exit 1; }
 
-# Compile and install the fixed driver
+# Compile the driver
+echo "Building the driver..."
 sudo make clean
 sudo make
-sudo make load
 
-# Remove conflicting package
+# Load the driver
+echo "Loading the driver..."
+sudo insmod ch34x.ko
+
+# Remove conflicting package (brltty can interfere with serial ports)
+echo "Removing brltty to avoid conflicts..."
 sudo apt remove -y brltty
 
 # Verify installation
-echo "\nInstallation complete. Plug in your device and check with: ls /dev/ttyUSB*"
+echo -e "\nInstallation complete!"
+echo "Plug in your CH340/CH341 device and check for /dev/ttyUSB* with:"
+echo "  ls /dev/ttyUSB*"
