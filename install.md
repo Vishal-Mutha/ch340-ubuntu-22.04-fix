@@ -1,5 +1,12 @@
 # Installation Instructions for CH340 Driver Fix on Ubuntu 22.04
 
+## Prerequisites
+Before installing the CH340 driver fix, ensure your system has the required tools and kernel headers:
+```bash
+sudo apt update
+sudo apt install build-essential linux-headers-$(uname -r)
+```
+
 ## Step 1: Automated Installation
 You can go through the installation using `install.sh`:
 
