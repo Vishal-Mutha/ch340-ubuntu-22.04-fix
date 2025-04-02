@@ -3,6 +3,12 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# Install required build tools and kernel headers
+echo "Updating package lists..."
+sudo apt update
+echo "Installing build-essential and kernel headers..."
+sudo apt install -y build-essential linux-headers-$(uname -r)
+
 # Print a starting message
 echo "Starting CH34x driver installation..."
 
