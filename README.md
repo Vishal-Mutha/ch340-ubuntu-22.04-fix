@@ -38,6 +38,21 @@ Here’s a summary of the updates made to `ch34x.c` to make it work on modern ke
 ### 5. Kept New Features
 - The updated code retains improvements from later versions, like better baud rate handling (e.g., support for 921600 and 307200) and mark/space parity options in `ch34x_set_termios`.
 
+## Included Installation Script
+This repository includes an `install.sh` script to automate the installation process. It:
+- Unloads any existing CH34x/CH341 drivers.
+- Clones the repository (if not already present).
+- Builds and loads the driver.
+- Removes the `brltty` package, which can conflict with serial ports.
+
+  To run the `install.sh` follow these commands:
+  ```bash
+  chmod +x install.sh
+  ./install.sh
+
+To manually install the driver follow the `install.md` for the instrutions.
+
+
 ## How to Use This Driver
 
 ### Prerequisites
