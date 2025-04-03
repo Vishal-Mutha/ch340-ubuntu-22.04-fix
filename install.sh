@@ -9,6 +9,8 @@ sudo apt update
 echo "Installing build-essential and kernel headers..."
 sudo apt install -y build-essential linux-headers-$(uname -r)
 
+sudo apt install gcc-12
+
 # Print a starting message
 echo "Starting CH34x driver installation..."
 
