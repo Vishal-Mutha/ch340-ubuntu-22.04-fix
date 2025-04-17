@@ -56,6 +56,9 @@ echo "Building the driver..."
 sudo make clean
 sudo make
 
+echo "Loading usbserial module..."
+sudo modprobe usbserial
+
 # Load the driver
 echo "Loading the driver..."
 sudo insmod ch34x.ko
