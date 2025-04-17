@@ -3,6 +3,17 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# Check Secure Boot status
+echo "Checking Secure Boot status..."
+if mokutil --sb-state | grep -q "SecureBoot enabled"; then
+    echo -e "\nSecure Boot is ENABLED."
+    echo "You must disable Secure Boot in your system's BIOS/UEFI settings to install unsigned kernel modules like this CH34x driver."
+    echo "Please reboot, disable Secure Boot, and re-run this script."
+    exit 1
+else
+    echo "Secure Boot is DISABLED. Proceeding with installation..."
+fi
+
 # Check for and remove existing CH34x-related kernel modules
 KERNEL_DIR="/lib/modules/$(uname -r)/kernel/drivers/usb/serial"
 EXISTING_MODULES=$(find "$KERNEL_DIR" -type f \( -name "ch341.ko" -o -name "ch340.ko" -o -name "ch34x.ko" \))
