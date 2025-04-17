@@ -3,6 +3,18 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# Check for and remove existing CH34x-related kernel modules
+KERNEL_DIR="/lib/modules/$(uname -r)/kernel/drivers/usb/serial"
+EXISTING_MODULES=$(find "$KERNEL_DIR" -type f \( -name "ch341.ko" -o -name "ch340.ko" -o -name "ch34x.ko" \))
+
+if [ -n "$EXISTING_MODULES" ]; then
+    echo "Found the following existing CH34x-related kernel module files:"
+    echo "$EXISTING_MODULES"
+    echo "Removing them to avoid conflicts..."
+    sudo rm -rf $EXISTING_MODULES
+    echo "Removed existing CH34x kernel modules."
+fi
+
 # Install required build tools and kernel headers
 echo "Updating package lists..."
 sudo apt update
